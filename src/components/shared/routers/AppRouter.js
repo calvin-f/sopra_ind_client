@@ -60,9 +60,11 @@ class AppRouter extends React.Component {
                   path="/user/:id/edit"
                   exact
                   render={() => (
-                      <GameGuard>
-                          <EditProfile />
-                      </GameGuard>
+                      //<GameGuard>
+
+                            <EditProfile />
+
+                      //</GameGuard>
                   )}
               />
             <Route path="/" exact render={() => <Redirect to={"/game"} />} />

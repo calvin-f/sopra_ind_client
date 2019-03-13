@@ -113,6 +113,7 @@ class Register extends React.Component {
                     this.setState( {password: null});
                     this.setState( {birthday: null});
                 } else{
+                    console.log(res);
                     this.props.history.push('login')
                 }
             })

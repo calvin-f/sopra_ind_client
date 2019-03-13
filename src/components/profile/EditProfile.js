@@ -72,9 +72,8 @@ class EditProfile extends React.Component {
      * In this case the initial state is defined in the constructor. The state is a JS object containing two fields: name and username
      * These fields are then handled in the onChange() methods in the resp. InputFields
      */
-    constructor(props) {
-        super(props);
-        this.goBack = this.goBack.bind(this);
+    constructor() {
+        super();
         this.state = {
             user: null,
             username: null,
@@ -85,6 +84,8 @@ class EditProfile extends React.Component {
      * HTTP POST request is sent to the backend.
      * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
      */
+
+
 
 
     edit() {
@@ -111,7 +112,7 @@ class EditProfile extends React.Component {
                     this.setState( {username: null});
                     this.setState( {birthday: null});
                 } else{
-                    this.props.history.goBack();
+                    this.props.history.push("");
                 }
             })
             .catch(err => {
@@ -165,6 +166,35 @@ class EditProfile extends React.Component {
                     alert(`Something went wrong during the login: ${err.message}`);
                 }
             });
+        fetch(`${getDomain()}/users/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: localStorage.getItem("token")
+        })
+        //.then(response => response.json())
+        //.then(returnedUser => {
+        // user sign up successfully worked --> navigate to the route /login in the GameRouter
+        //    this.props.history.push(`/login`);
+        //})
+            .then(async res => {
+                if (!res.ok) {
+                    const error = await res.json();
+                    alert(error.message);
+                } else {
+                    if(!(await res.json()))
+                        this.props.history.push("/game")
+                }
+
+            })
+            .catch(err => {
+                if (err.message.match(/Failed to fetch/)) {
+                    alert("The server cannot be reached. Did you start it?");
+                } else {
+                    alert(`Something went wrong during the login: ${err.message}`);
+                }
+            });
     }
 
     render() {
@@ -172,7 +202,7 @@ class EditProfile extends React.Component {
             <BaseContainer>
                 <FormContainer>
                     <Form>
-                        <h3>Edit</h3>
+                        <h3>Register</h3>
                         <Label>Username</Label>
                         <InputField
                             placeholder="Enter here.."
